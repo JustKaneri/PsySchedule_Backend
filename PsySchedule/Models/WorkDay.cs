@@ -1,10 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
 {
     [Table("WorkDay")]
+    [Index("Date")]
     public class WorkDay
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public DateOnly Date { get; set; }  
@@ -26,5 +31,7 @@ namespace PsySchedule.Models
         public Psychologist Psychologist { get; set; } 
 
         public string Status { get; set; }  
+
+        public IEnumerable<Appointment> Appointments { get; set; }
     }
 }

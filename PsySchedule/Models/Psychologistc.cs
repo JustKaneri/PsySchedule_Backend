@@ -1,12 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
 {
     [Table("Psychologist")]
+    [Index("Login")]
     public class Psychologist
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public required string Name { get; set; }
@@ -19,21 +22,19 @@ namespace PsySchedule.Models
 
         public string TimeZone { get; set; }
 
-        public DateTimeOffset RegisteredAt { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset RegisteredAt { get; set; } = DateTimeOffset.UtcNow;
 
-        public IEnumerable<Vacations> Vacations { get; set; }
+        public IEnumerable<Vacation> Vacations { get; set; }
 
         public IEnumerable<Token> RefreshTokens { get; set; }
 
-        public int ScheduleTemplateId { get;set;  }
+        public Nullable<int> ScheduleTemplateId { get;set;  }
 
-        public ScheduleTemplate ScheduleTemplate { get; set; }
+        public ScheduleTemplate? ScheduleTemplate { get; set; }
 
         public IEnumerable<WorkDay> WorkDays { get; set; }
 
-        public int AppointmentId { get; set; }
-
-        public Appointment Appointment { get; set; }    
+        public IEnumerable<Appointment> Appointments { get; set; }     
 
         public IEnumerable<Service> Services { get; set; }
     }

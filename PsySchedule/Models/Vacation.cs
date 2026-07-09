@@ -1,10 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
 {
-    [Table("Vacations")]
-    public class Vacations
+    [Table("Vacation")]
+    public class Vacation
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; } 
 
         public DateOnly StartedAt { get; set;  }

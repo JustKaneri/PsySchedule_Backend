@@ -1,10 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
 {
     [Table("Appointment")]
+    [Index("StartedAt")]
     public class Appointment
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public int PsychologistId { get; set; }
@@ -27,7 +32,7 @@ namespace PsySchedule.Models
 
         public bool IsConfirmationPsychologist { get; set; }
 
-        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
         public int ServiceId { get; set; }
 
@@ -36,6 +41,8 @@ namespace PsySchedule.Models
         public int WorkDayId { get; set; }
 
         public WorkDay WorkDay { get; set; }
+
+        public IEnumerable<AppointmentНistory> AppointmentНistories { get; set; }   
 
     }
 }

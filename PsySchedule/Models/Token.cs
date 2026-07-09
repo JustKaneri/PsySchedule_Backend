@@ -1,11 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
 {
     [Table("Token")]
+    [Index("TokenRefresh")]
     public class Token
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public int PsychologistId { get; set; }
@@ -24,7 +28,7 @@ namespace PsySchedule.Models
 
         public bool IsRevoked { get; set; }
 
-        public DateTimeOffset CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
         public DateTimeOffset ExpiresAt { get; set; }
     }
