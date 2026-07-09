@@ -7,12 +7,12 @@ namespace PsySchedule.Models
     {
         public int Id { get; set; } 
 
-        public DateTime StartTime { get; set;  }
+        public DateOnly StartedAt { get; set;  }
 
-        public DateTime EndTime { get; set; }
+        public DateOnly FinishedAt { get; set; }
 
-        public int PsychologistsId { get;set;  }
+        public int PsychologistId { get;set;  }
 
-        public Psychologists Psychologists { get; set; }
+        public Psychologist Psychologist { get; set; }
     }
 }

@@ -3,14 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
 {
-    [Table("RefreshToken")]
-    public class RefreshToken
+    [Table("Token")]
+    public class Token
     {
         public int Id { get; set; }
 
-        public int PsychologistsId { get; set; }
+        public int PsychologistId { get; set; }
 
-        public Psychologists Psychologists { get; set; }    
+        public Psychologist Psychologist { get; set; }    
 
         public string TokenRefresh { get; set; }
 
@@ -24,8 +24,8 @@ namespace PsySchedule.Models
 
         public bool IsRevoked { get; set; }
 
-        public DateTime AddeDate { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public DateTime ExpireDate { get; set; }
+        public DateTimeOffset ExpiresAt { get; set; }
     }
 }

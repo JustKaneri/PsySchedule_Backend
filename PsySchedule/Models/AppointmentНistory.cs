@@ -11,7 +11,7 @@ namespace PsySchedule.Models
 
         public Appointment Appointment { get; set; }  
         
-        public DateTime DateCrete { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         public int OldState { get; set; }
 

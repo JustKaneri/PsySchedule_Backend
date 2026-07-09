@@ -25,4 +25,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Models\Psychologistcs.cs" />
+  </ItemGroup>
+
 </Project>

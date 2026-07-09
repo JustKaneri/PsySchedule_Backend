@@ -9,15 +9,15 @@ namespace PsySchedule.Models
 
         public int PsychologistId { get; set; }
 
-        public Psychologists Psychologist { get; set; }
+        public Psychologist Psychologist { get; set; }
 
         public int ClientId { get; set; }
 
         public Client Client { get; set; }  
 
-        public DateTime StartTime { get; set; }
+        public DateTimeOffset StartedAt { get; set; }
 
-        public DateTime EndTime { get; set; }
+        public DateTimeOffset FinishedAt { get; set; }
 
         public int StatusId { get; set; }
 
@@ -27,7 +27,7 @@ namespace PsySchedule.Models
 
         public bool IsConfirmationPsychologist { get; set; }
 
-        public DateTime DateCreate { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         public int ServiceId { get; set; }
 

@@ -7,21 +7,23 @@ namespace PsySchedule.Models
     {
         public int Id { get; set; }
 
-        public DateTime StartTime { get; set; }
+        public DateOnly Date { get; set; }  
 
-        public DateTime EndTime { get; set; }
+        public TimeOnly StartedAt { get; set; }
 
-        public TimeOnly BreakStart { get; set; }
+        public TimeOnly FinishedAt { get; set; }
 
-        public TimeOnly BreakEnd { get; set; }
+        public TimeOnly BreakStartedAt { get; set; }
+
+        public TimeOnly BreakFinishedAt { get; set; }
 
         public int ScheduleTemplateId { get; set; }
 
         public ScheduleTemplate ScheduleTemplate { get; set; }  
 
-        public int PsychologistsId { get; set; }
+        public int PsychologistId { get; set; }
 
-        public Psychologists Psychologists { get; set; } 
+        public Psychologist Psychologist { get; set; } 
 
         public string Status { get; set; }  
     }

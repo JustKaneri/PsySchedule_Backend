@@ -21,7 +21,9 @@ namespace PsySchedule.Models
 
         public long TelegramChatId { get; set; }
 
-        public DateTime DateRegistry { get; set; }
+        public string TimeZone { get; set; }
+
+        public DateTimeOffset RegisteredAt { get; set; } = DateTime.UtcNow;
     }
 
 }

@@ -11,10 +11,10 @@ namespace PsySchedule.Models
 
         public decimal Price { get; set; }
 
-        public DateTime DateCreate { get; set; }
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
-        public int PsychologistsId { get; set; }
+        public int PsychologistId { get; set; }
 
-        public Psychologists Psychologists { get; set; }
+        public Psychologist Psychologist { get; set; }
     }
 }
