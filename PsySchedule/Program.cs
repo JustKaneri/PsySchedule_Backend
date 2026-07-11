@@ -3,12 +3,12 @@ using Prometheus;
 using PsySchedule.Context;
 using PsySchedule.Depends;
 using PsySchedule.Models;
+using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -24,6 +24,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpMetrics();
