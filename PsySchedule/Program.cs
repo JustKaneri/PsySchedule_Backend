@@ -1,26 +1,33 @@
 using Microsoft.EntityFrameworkCore;
+using Prometheus;
 using PsySchedule.Context;
+using PsySchedule.Depends;
+using PsySchedule.Models;
+using Serilog;
+using Serilog.Events;
+using Serilog.Formatting.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<DataContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PsySchedule"));
-});
+builder.UsePgSQl();
+builder.UseSerilog();
+
+
+Log.Information("Start application");
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseHttpMetrics();
+app.UseMetricServer();
 
 app.UseHttpsRedirection();
 
