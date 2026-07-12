@@ -1,6 +1,6 @@
 @PsySchedule_HostAddress = http://localhost:5208
 
-GET {{PsySchedule_HostAddress}}/weatherforecast/
+GET {{PsySchedule_HostAddress}}/api/v1/time-zone
 Accept: application/json
 
 ###

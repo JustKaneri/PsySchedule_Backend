@@ -1,12 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using Prometheus;
-using PsySchedule.Context;
 using PsySchedule.Depends;
-using PsySchedule.Models;
 using Scalar.AspNetCore;
 using Serilog;
-using Serilog.Events;
-using Serilog.Formatting.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +10,7 @@ builder.Services.AddOpenApi();
 
 builder.UsePgSQl();
 builder.UseSerilog();
-
+builder.UseAuthentication();
 
 Log.Information("Start application");
 

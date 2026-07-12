@@ -11,7 +11,7 @@ namespace PsySchedule.Controllers
         /// Метод получения списка TimeZone
         /// </summary>
         /// <returns></returns>
-        [HttpGet("time_zone")]
+        [HttpGet("time-zone")]
         [ProducesResponseType(typeof(ReadOnlyCollection<TimeZoneInfo>),200)]
         public IActionResult GetTimeZone()
         {
