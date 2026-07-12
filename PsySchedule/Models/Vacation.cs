@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
 {
+    /// <summary>
+    /// Период отпуска психолога 
+    /// </summary>
     [Table("Vacation")]
     public class Vacation
     {

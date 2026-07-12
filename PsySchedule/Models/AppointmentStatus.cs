@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
 {
+    /// <summary>
+    /// Словарь статус записи
+    /// </summary>
     [Table("AppointmentStatus")]
     public class AppointmentStatus
     {

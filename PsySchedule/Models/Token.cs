@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
 {
+    /// <summary>
+    /// Токены авторизации
+    /// </summary>
     [Table("Token")]
     [Index("TokenRefresh")]
     public class Token

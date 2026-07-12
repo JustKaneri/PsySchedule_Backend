@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
 {
+    /// <summary>
+    /// Психолог
+    /// </summary>
     [Table("Psychologist")]
     [Index("Login")]
     public class Psychologist

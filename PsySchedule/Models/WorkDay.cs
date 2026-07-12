@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
 {
+    /// <summary>
+    /// Рабочий день
+    /// </summary>
     [Table("WorkDay")]
     [Index("Date")]
     public class WorkDay

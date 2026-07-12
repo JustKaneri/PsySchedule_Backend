@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
 {
+    /// <summary>
+    /// История изменения статуса записи
+    /// </summary>
     [Table("AppointmentНistory")]
     public class AppointmentНistory
     {

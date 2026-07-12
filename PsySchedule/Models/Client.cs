@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
 {
+    /// <summary>
+    /// Клиент
+    /// </summary>
     [Table("Client")]
     public class Client
     {

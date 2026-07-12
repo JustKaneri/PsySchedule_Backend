@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
 {
+    /// <summary>
+    /// Шаблон расписания
+    /// </summary>
     [Table("ScheduleTemplate")]
     [Index("PsychologistId")]
     public class ScheduleTemplate
