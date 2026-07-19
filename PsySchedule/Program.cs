@@ -1,5 +1,7 @@
+using FluentValidation;
 using Prometheus;
 using PsySchedule.Depends;
+using PsySchedule.Validations;
 using Scalar.AspNetCore;
 using Serilog;
 
@@ -11,6 +13,9 @@ builder.Services.AddOpenApi();
 builder.UsePgSQl();
 builder.UseSerilog();
 builder.UseAuthentication();
+builder.UseDepends();
+
+builder.Services.AddValidatorsFromAssemblyContaining<PsychologistRegistrationValidator>();
 
 Log.Information("Start application");
 
@@ -24,9 +29,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpMetrics();
 app.UseMetricServer();
+app.MapMetrics();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -11,6 +11,8 @@ namespace PsySchedule.Depends
                           .Enrich.FromLogContext()
                           .CreateLogger();
 
+            builder.Logging.ClearProviders();
+            builder.Logging.AddSerilog(Log.Logger);
             builder.Host.UseSerilog();
 
             return builder;

@@ -11,7 +11,7 @@ namespace PsySchedule.Depends
     {
         public static WebApplicationBuilder UseAuthentication(this WebApplicationBuilder builder)
         {
-            var jwt = builder.Configuration.GetSection("Jwt").Get<JwtParameters>()!;
+            var jwt = builder.Configuration.GetSection("Jwt").Get<TokenParameters>()!;
 
             var tokenValidationParameters = new TokenValidationParameters()
             {

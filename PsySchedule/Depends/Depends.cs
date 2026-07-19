@@ -1,4 +1,6 @@
-﻿using PsySchedule.Models;
+﻿using PsySchedule.Interfaces;
+using PsySchedule.Models;
+using PsySchedule.Services;
 
 namespace PsySchedule.Depends
 {
@@ -7,7 +9,11 @@ namespace PsySchedule.Depends
         public static WebApplicationBuilder UseDepends(this WebApplicationBuilder builder)
         {
             //IOptions
-            builder.Services.Configure<JwtParameters>(builder.Configuration.GetSection("Jwt"));
+            builder.Services.Configure<TokenParameters>(builder.Configuration.GetSection("Jwt"));
+
+            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IRegistrationService, RegistrationService>();
+            builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
             return builder;
         }
