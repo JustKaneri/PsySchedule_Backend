@@ -8,15 +8,19 @@ namespace PsySchedule.Models
     /// Психолог
     /// </summary>
     [Table("Psychologist")]
-    [Index("Login")]
+    [Index("Login", IsUnique = true)]
     public class Psychologist
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [MinLength(6)]
+        [MaxLength(50)]
         public required string Name { get; set; }
 
+        [MinLength(6)]
+        [MaxLength(30)]
         public required string Login { get; set; }
 
         public required string Password { get; set; }

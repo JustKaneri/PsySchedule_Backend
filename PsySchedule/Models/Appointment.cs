@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PsySchedule.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -27,13 +28,11 @@ namespace PsySchedule.Models
 
         public DateTimeOffset FinishedAt { get; set; }
 
-        public int StatusId { get; set; }
-
         public AppointmentStatus Status { get; set; }
 
-        public bool IsConfirmationClient { get; set; }
+        public ConfirmationStatus ClientConfirmation { get; set; }
 
-        public bool IsConfirmationPsychologist { get; set; }
+        public ConfirmationStatus PsychologistConfirmation { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 

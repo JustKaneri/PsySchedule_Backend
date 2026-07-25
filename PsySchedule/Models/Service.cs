@@ -15,6 +15,7 @@ namespace PsySchedule.Models
 
         public required string Name { get; set; }
 
+        [Range(0, 500_000)]
         public int Price { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;

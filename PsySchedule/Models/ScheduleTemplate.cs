@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PsySchedule.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,7 +16,7 @@ namespace PsySchedule.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public required string Weekend { get; set; }
+        public WeekDay Weekend { get; set; }
 
         public TimeOnly StartedAt { get; set; }
 

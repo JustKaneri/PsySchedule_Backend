@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PsySchedule.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,6 +15,8 @@ namespace PsySchedule.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
+        public WeekDay Weekend { get; set; }
 
         public DateOnly Date { get; set; }  
 
@@ -33,7 +36,7 @@ namespace PsySchedule.Models
 
         public Psychologist Psychologist { get; set; } 
 
-        public string Status { get; set; }  
+        public WorkDayState State { get; set; }  
 
         public IEnumerable<Appointment> Appointments { get; set; }
     }

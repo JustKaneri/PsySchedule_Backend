@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PsySchedule.Models;
+using PsySchedule.Models.Enums;
 
 namespace PsySchedule.Context
 {
     public class DataContext : DbContext
     {
         public DbSet<Appointment> Appointments { get; set; }   
-        public DbSet<AppointmentStatus> AppointmentStatuses { get; set; }   
         public DbSet<AppointmentНistory> AppointmentНistories { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Psychologist> Psychologists  { get; set; }
@@ -25,12 +25,29 @@ namespace PsySchedule.Context
                         .WithOne(st => st.Psychologist)
                         .HasForeignKey<Psychologist>(ps => ps.ScheduleTemplateId);
 
-            modelBuilder.Entity<Client>().Property(c => c.Rating).HasDefaultValue(1);
+            modelBuilder.Entity<ScheduleTemplate>().Property(st => st.Weekend).HasConversion<string>();
             modelBuilder.Entity<ScheduleTemplate>().Property(st => st.Gap).HasDefaultValue(15);
-            modelBuilder.Entity<Appointment>().Property(st => st.IsConfirmationClient).HasDefaultValue(false);
-            modelBuilder.Entity<Appointment>().Property(st => st.IsConfirmationPsychologist).HasDefaultValue(false);
 
+            modelBuilder.Entity<Client>().Property(c => c.Rating).HasDefaultValue(1);
+
+            modelBuilder.Entity<Appointment>().Property(st => st.ClientConfirmation)
+                                              .HasConversion<string>()
+                                              .HasDefaultValue(ConfirmationStatus.Pending);
+
+
+            modelBuilder.Entity<Appointment>().Property(st => st.PsychologistConfirmation)
+                                              .HasConversion<string>()
+                                              .HasDefaultValue(ConfirmationStatus.Pending);
+
+            modelBuilder.Entity<Appointment>().Property(st => st.Status)
+                                              .HasConversion<string>()
+                                              .HasDefaultValue(AppointmentStatus.Created);
+
+
+            modelBuilder.Entity<WorkDay>().Property(wd => wd.State)
+                                          .HasConversion<string>()
+                                          .HasDefaultValue(WorkDayState.Generated);
+;
         }
-
     }
 }

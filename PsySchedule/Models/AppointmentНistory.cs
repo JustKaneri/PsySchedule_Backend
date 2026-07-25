@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PsySchedule.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
@@ -19,8 +20,8 @@ namespace PsySchedule.Models
 
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
-        public int OldState { get; set; }
+        public AppointmentStatus OldState { get; set; }
 
-        public int NewState { get; set; }
+        public AppointmentStatus NewState { get; set; }
     }
 }
