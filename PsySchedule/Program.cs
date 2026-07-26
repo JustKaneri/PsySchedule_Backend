@@ -1,6 +1,7 @@
 using FluentValidation;
 using Prometheus;
 using PsySchedule.Depends;
+using PsySchedule.Middlewares;
 using PsySchedule.Validations;
 using Scalar.AspNetCore;
 using Serilog;
@@ -26,6 +27,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
+
+app.UseMiddleware<UseExceptionHandler>();
 
 app.UseHttpMetrics();
 app.UseMetricServer();
