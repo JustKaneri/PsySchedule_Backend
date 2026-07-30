@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PsySchedule.Dto;
 using PsySchedule.Interfaces;
+using PsySchedule.Models;
 using PsySchedule.Validations;
 
 namespace PsySchedule.Controllers
@@ -15,11 +16,16 @@ namespace PsySchedule.Controllers
     {
         private readonly IRegistrationService _registerService;
         private readonly IValidator<RegisterPsychologistDto> _validatorRegistry;
+        private readonly IValidator<AuthenticationDto> _validatorAuth;
+        private readonly IAuthenticationService _authenticationService;
 
-        public AuthenticationController(IRegistrationService registerService, IValidator<RegisterPsychologistDto> validatorRegistry)
+        public AuthenticationController(IRegistrationService registerService, IValidator<RegisterPsychologistDto> validatorRegistry, 
+                                        IValidator<AuthenticationDto> validatorAuth, IAuthenticationService authenticationService)
         {
             _registerService = registerService;
             _validatorRegistry = validatorRegistry;
+            _validatorAuth = validatorAuth;
+            _authenticationService = authenticationService;
         }
 
         /// <summary>
@@ -28,9 +34,21 @@ namespace PsySchedule.Controllers
         /// <returns></returns>
         [HttpPost("authentication")]
         [ProducesResponseType(typeof(AuthTokensDto),200)]
-        public IActionResult Authentication([FromBody]AuthenticationDto authenticationData, CancellationToken cancellationToken)
+        public async Task<IActionResult> Authentication([FromBody]AuthenticationDto authenticationData, CancellationToken cancellationToken)
         {
-            return Ok();
+            var validationResult = _validatorAuth.Validate(authenticationData);
+
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
+
+            var userData = new UserDataDto(Request.HttpContext.Connection.RemoteIpAddress.ToString(), Request.Headers["User-Agent"].ToString());
+
+            var tokens = await _authenticationService.AuthenticateAsync(authenticationData, userData, cancellationToken);
+
+            if (tokens.IsSuccess)
+                return Ok(new AccessTokenDto(tokens.Value.AccessToken));
+
+            return BadRequest(tokens.Error.errorMessage);
         }
 
         /// <summary>
