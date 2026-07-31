@@ -5,7 +5,7 @@ using PsySchedule.Dto;
 using PsySchedule.Interfaces;
 using Xunit.Abstractions;
 
-namespace PsyScheduleTests
+namespace PsyScheduleTests.ServiceTests
 {
     [Collection("Database")]
     public class RegisterTest : BaseTestClass, IClassFixture<PostgreSqlFixture>

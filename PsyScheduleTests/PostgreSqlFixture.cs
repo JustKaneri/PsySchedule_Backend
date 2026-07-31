@@ -72,6 +72,7 @@ namespace PsyScheduleTests
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IRegistrationService, RegistrationService>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
         }
 
         private async Task InitDataBaseAsync()
