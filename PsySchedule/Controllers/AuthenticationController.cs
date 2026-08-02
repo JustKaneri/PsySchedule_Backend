@@ -87,13 +87,23 @@ namespace PsySchedule.Controllers
         }
 
         /// <summary>
-        /// Обнуление токенов
+        /// Отзыв токена
         /// </summary>
         /// <returns></returns>
         [HttpPost("logout")]
-        public IActionResult Logout(CancellationToken cancellationToken)
+        public async Task<IActionResult> Logout(CancellationToken cancellationToken)
         {
-            return NoContent();
+            Request.Cookies.TryGetValue("rftkn", out string refreshToken);
+
+            if (string.IsNullOrWhiteSpace(refreshToken))
+                return Unauthorized("Токен не может быть пустым");
+
+            var result = await _authenticationService.LogoutAsync(refreshToken, cancellationToken);
+
+            if (result.IsSuccess)
+                return Ok();
+
+            return BadRequest(result.Error.errorMessage);
         }
     }
 }

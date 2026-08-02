@@ -54,9 +54,21 @@ namespace PsySchedule.Services
             return Result<AuthTokensDto>.Success(new(token.TokenAccess, token.TokenRefresh));
         }
 
-        public Task<Result<bool>> LogoutAsync(string refreshToken, CancellationToken cancellationToken)
+        public async Task<Result<bool>> LogoutAsync(string refreshToken, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var countRow = await _context.Tokens
+                                         .Where(tk => tk.TokenRefresh == refreshToken &&
+                                                !tk.IsUsed &&
+                                                !tk.IsRevoked)
+                                         .ExecuteUpdateAsync(tk => tk.SetProperty(p => p.IsRevoked, true),cancellationToken);
+
+            if (countRow == 0)
+            {
+                return Result<bool>.Failure(401, "Токен не действителен");
+            }
+
+            
+            return Result<bool>.Success(true);
         }
 
         public Task<Result<AuthTokensDto>> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)
