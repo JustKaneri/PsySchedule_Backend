@@ -65,7 +65,7 @@ namespace PsyScheduleTests
             });
 
 
-            services.AddSerilog();
+            //services.AddSerilog();
             services.AddLogging();
 
             // Регистрируем сервисы
