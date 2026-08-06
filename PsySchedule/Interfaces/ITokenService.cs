@@ -9,7 +9,7 @@ namespace PsySchedule.Interfaces
         /// Создание токена
         /// </summary>
         /// <returns></returns>
-        public Token CreateToken(int userId, UserDataDto userData);
+        public Token CreateToken(int userId, MetaDataDto userData);
 
         /// <summary>
         /// Верификация Refresh токена и Access

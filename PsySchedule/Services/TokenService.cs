@@ -19,7 +19,7 @@ namespace PsySchedule.Services
             _parameters = parameters.Value;
         }
 
-        public Token CreateToken(int userId, UserDataDto userData)
+        public Token CreateToken(int userId, MetaDataDto userData)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 

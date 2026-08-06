@@ -13,15 +13,16 @@ namespace PsySchedule.Interfaces
         /// </summary>
         /// <param name="authenticationData">Данные для аутентификации</param>
         /// <returns>Acsess и Refresh токены</returns>
-        public Task<Result<AuthTokensDto>> AuthenticateAsync(AuthenticationDto authenticationData, UserDataDto userData, CancellationToken cancellationToken);
+        public Task<Result<AuthTokensDto>> AuthenticateAsync(AuthenticationDto authenticationData, MetaDataDto metaData, CancellationToken cancellationToken);
 
         /// <summary>
         /// Обновление токенов
         /// </summary>
         /// <param name="refreshToken"></param>
         /// <param name="cancellationToken"></param>
+        /// <param name="metaData"></param>
         /// <returns></returns>
-        public Task<Result<AuthTokensDto>> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken);
+        public Task<Result<AuthTokensDto>> RefreshTokenAsync(string refreshToken, MetaDataDto metaData, CancellationToken cancellationToken);
 
         /// <summary>
         /// Завершение пользовательской сесии

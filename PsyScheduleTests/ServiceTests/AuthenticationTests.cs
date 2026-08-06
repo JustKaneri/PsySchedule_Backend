@@ -14,7 +14,7 @@ namespace PsyScheduleTests.ServiceTests
         private readonly ITestOutputHelper _outputHelper;
 
         private readonly static RegisterPsychologistDto regData = new RegisterPsychologistDto("Иван", "Иван123", "1234", "Russian Standard Time");
-        private readonly static UserDataDto usData = new UserDataDto("192.168.0.1", @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
+        private readonly static MetaDataDto usData = new MetaDataDto("192.168.0.1", @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
 
         public AuthenticationTests(PostgreSqlFixture fixture, ITestOutputHelper outputHelper) : base(fixture)
         {

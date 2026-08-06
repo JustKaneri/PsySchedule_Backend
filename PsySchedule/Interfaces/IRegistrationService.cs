@@ -17,6 +17,6 @@ namespace PsySchedule.Interfaces
         /// <returns>
         /// Результат регистрации с данными аутентификации.
         /// </returns>
-        public Task<Result<AuthTokensDto>> RegisterPsychologistAsync(RegisterPsychologistDto registerDto, UserDataDto userData, CancellationToken cancellationToken);
+        public Task<Result<AuthTokensDto>> RegisterPsychologistAsync(RegisterPsychologistDto registerDto, MetaDataDto userData, CancellationToken cancellationToken);
     }
 }

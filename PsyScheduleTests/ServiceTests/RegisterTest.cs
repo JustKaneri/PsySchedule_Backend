@@ -30,7 +30,7 @@ namespace PsyScheduleTests.ServiceTests
             var service = scope.ServiceProvider.GetRequiredService<IRegistrationService>();
 
             var regData = new RegisterPsychologistDto("Иван", "Иван123", "1234", "Russian Standard Time");
-            var usData = new UserDataDto("192.168.0.1", @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
+            var usData = new MetaDataDto("192.168.0.1", @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
 
             var result = await service.RegisterPsychologistAsync(regData,usData , CancellationToken.None);
 
@@ -55,7 +55,7 @@ namespace PsyScheduleTests.ServiceTests
 
             var regData = new RegisterPsychologistDto("Иван", "Иван123", "1234", "Russian Standard Time");
             var regData2 = new RegisterPsychologistDto("Олег", "Иван123", "1234", "Russian Standard Time");
-            var usData = new UserDataDto("192.168.0.1", @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
+            var usData = new MetaDataDto("192.168.0.1", @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
 
             var result1 = service1.RegisterPsychologistAsync(regData, usData, CancellationToken.None);
             var result2 = service2.RegisterPsychologistAsync(regData2, usData, CancellationToken.None);
@@ -87,7 +87,7 @@ namespace PsyScheduleTests.ServiceTests
             var service2 = scope2.ServiceProvider.GetRequiredService<IRegistrationService>();
 
             var regData = new RegisterPsychologistDto("Иван", "Иван123", "1234", "Russian Standard Time");
-            var usData = new UserDataDto("192.168.0.1", @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
+            var usData = new MetaDataDto("192.168.0.1", @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
 
             var result1 = await service1.RegisterPsychologistAsync(regData, usData, CancellationToken.None);
 
@@ -125,7 +125,7 @@ namespace PsyScheduleTests.ServiceTests
 
             var regData = new RegisterPsychologistDto("Иван", "Иван123", "1234", "Russian Standard Time");
             var regData2 = new RegisterPsychologistDto("Олег", "Олег123", "1234", "Russian Standard Time");
-            var usData = new UserDataDto("192.168.0.1", @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
+            var usData = new MetaDataDto("192.168.0.1", @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
 
             var result1 = await service1.RegisterPsychologistAsync(regData, usData, CancellationToken.None);
             var result2 = await service2.RegisterPsychologistAsync(regData2, usData, CancellationToken.None);

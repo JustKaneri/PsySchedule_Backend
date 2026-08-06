@@ -25,7 +25,7 @@ namespace PsySchedule.Services
             _logger = logger;
         }
 
-        public async Task<Result<AuthTokensDto>> RegisterPsychologistAsync(RegisterPsychologistDto registerDto, UserDataDto userData, CancellationToken cancellationToken)
+        public async Task<Result<AuthTokensDto>> RegisterPsychologistAsync(RegisterPsychologistDto registerDto, MetaDataDto userData, CancellationToken cancellationToken)
         {
             string normalizationLogin = registerDto.Login.Trim().ToLowerInvariant();
 

@@ -41,7 +41,7 @@ namespace PsySchedule.Controllers
             if (!validationResult.IsValid)
                 return BadRequest(validationResult.Errors);
 
-            var userData = new UserDataDto(Request.HttpContext.Connection.RemoteIpAddress.ToString(), Request.Headers["User-Agent"].ToString());
+            var userData = new MetaDataDto(Request.HttpContext.Connection.RemoteIpAddress.ToString(), Request.Headers["User-Agent"].ToString());
 
             var tokens = await _authenticationService.AuthenticateAsync(authenticationData, userData, cancellationToken);
 
@@ -65,7 +65,7 @@ namespace PsySchedule.Controllers
             if(!validationResult.IsValid)
                 return BadRequest(validationResult.Errors);
 
-            var userData = new UserDataDto(Request.HttpContext.Connection.RemoteIpAddress.ToString(), Request.Headers["User-Agent"].ToString());
+            var userData = new MetaDataDto(Request.HttpContext.Connection.RemoteIpAddress.ToString(), Request.Headers["User-Agent"].ToString());
 
             var result = await _registerService.RegisterPsychologistAsync(registerData, userData, cancellationToken);
 
@@ -81,9 +81,21 @@ namespace PsySchedule.Controllers
         /// <returns></returns>
         [HttpPost("refresh")]
         [ProducesResponseType(typeof(AuthTokensDto), 200)]
-        public IActionResult Refresh(CancellationToken cancellationToken)
+        public async Task<IActionResult> Refresh(CancellationToken cancellationToken)
         {
-            return Ok();
+            Request.Cookies.TryGetValue("rftkn", out string refreshToken);
+
+            if (string.IsNullOrWhiteSpace(refreshToken))
+                return Unauthorized("Токен не может быть пустым");
+
+            var userData = new MetaDataDto(Request.HttpContext.Connection.RemoteIpAddress.ToString(), Request.Headers["User-Agent"].ToString());
+
+            var result = await _authenticationService.RefreshTokenAsync(refreshToken, userData, cancellationToken);
+
+            if(result.IsSuccess)
+                return Created(nameof(AccessTokenDto), new AccessTokenDto(result.Value.AccessToken));
+
+            return BadRequest(result.Error.errorMessage);
         }
 
         /// <summary>

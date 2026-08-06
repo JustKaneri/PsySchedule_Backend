@@ -14,7 +14,7 @@ namespace PsySchedule.Services
         private readonly IPasswordHasher _passwordService;
         private readonly DataContext _context;
 
-        public AuthenticationService(ILogger<AuthenticationService> logger, ITokenService tokenService, 
+        public AuthenticationService(ILogger<AuthenticationService> logger, ITokenService tokenService,
                                      IPasswordHasher passwordService, DataContext context)
         {
             _logger = logger;
@@ -23,29 +23,29 @@ namespace PsySchedule.Services
             _context = context;
         }
 
-        public async Task<Result<AuthTokensDto>> AuthenticateAsync(AuthenticationDto authenticationData, UserDataDto userData, CancellationToken cancellationToken)
+        public async Task<Result<AuthTokensDto>> AuthenticateAsync(AuthenticationDto authenticationData, MetaDataDto metaData, CancellationToken cancellationToken)
         {
             string normalLogin = authenticationData.Login.Trim().ToLowerInvariant();
 
             var user = await _context.Psychologists.AsNoTracking()
-                                                   .Select(s => new {s.Id, s.Login, s.Password, s.Salt})
+                                                   .Select(s => new { s.Id, s.Login, s.Password, s.Salt })
                                                    .FirstOrDefaultAsync(ps => ps.Login == normalLogin, cancellationToken);
 
-            if (user == null )
+            if (user == null)
             {
                 _logger.LogWarning($"Failed attempt аuthenticate login {normalLogin}");
                 return Result<AuthTokensDto>.Failure(401, "Логин или пароль не совпадает");
             }
 
-            if(!_passwordService.Verify(authenticationData.Password, user.Password, user.Salt))
+            if (!_passwordService.Verify(authenticationData.Password, user.Password, user.Salt))
             {
                 _logger.LogWarning($"Failed attempt аuthenticate login {normalLogin} with not correct password");
                 return Result<AuthTokensDto>.Failure(401, "Логин или пароль не совпадает");
             }
 
-            var token = _tokenService.CreateToken(user.Id, userData);
+            var token = _tokenService.CreateToken(user.Id, metaData);
 
-            await _context.Tokens.AddAsync(token,cancellationToken);
+            await _context.Tokens.AddAsync(token, cancellationToken);
 
             await _context.SaveChangesAsync(cancellationToken);
 
@@ -60,20 +60,80 @@ namespace PsySchedule.Services
                                          .Where(tk => tk.TokenRefresh == refreshToken &&
                                                 !tk.IsUsed &&
                                                 !tk.IsRevoked)
-                                         .ExecuteUpdateAsync(tk => tk.SetProperty(p => p.IsRevoked, true),cancellationToken);
+                                         .ExecuteUpdateAsync(tk => tk.SetProperty(p => p.IsRevoked, true), cancellationToken);
 
             if (countRow == 0)
             {
                 return Result<bool>.Failure(401, "Токен не действителен");
             }
 
-            
+
             return Result<bool>.Success(true);
         }
 
-        public Task<Result<AuthTokensDto>> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)
+        public async Task<Result<AuthTokensDto>> RefreshTokenAsync(string refreshToken, MetaDataDto metaData, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var refToken = await _context.Tokens.FirstOrDefaultAsync(tk => tk.TokenRefresh == refreshToken &&
+                                                                   !tk.IsUsed &&
+                                                                   !tk.IsRevoked, cancellationToken);
+
+            if (refToken == null)
+            {
+                return Result<AuthTokensDto>.Failure(401, "Refresh токен не найден");
+            }
+
+            if (refToken.ExpiresAt <= DateTime.UtcNow)
+            {
+                return Result<AuthTokensDto>.Failure(401, "Refresh токен истек");
+            }
+
+            if (refToken.Ip != metaData.Ip)
+            {
+                _logger.LogInformation("Refresh token used from another IP. Old={Old}, New={New}", refToken.Ip, metaData.Ip);
+            }
+
+            if (!string.Equals(refToken.UserAgent, metaData.UserAgent, StringComparison.Ordinal))
+            {
+                _logger.LogInformation("Refresh token used from another User-Agent. Old={Old}, New={New}", refToken.UserAgent, metaData.UserAgent);
+            }
+
+            Token token = new Token();
+
+            await using var tran = await _context.Database.BeginTransactionAsync(cancellationToken);
+
+            try
+            {
+                var countRow = await _context.Tokens
+                                     .Where(tk => tk.TokenRefresh == refreshToken &&
+                                            !tk.IsUsed &&
+                                            !tk.IsRevoked &&
+                                             tk.ExpiresAt <= DateTime.UtcNow)
+                                     .ExecuteUpdateAsync(tk => tk.SetProperty(p => p.IsUsed, true), cancellationToken);
+
+                if (countRow == 0)
+                {
+                    _logger.LogWarning("Attempt to reuse refresh token: {RefreshToken}", refreshToken);
+                    return Result<AuthTokensDto>.Failure(409, "Refresh токен был использован");
+                }
+
+                token = _tokenService.CreateToken(refToken.PsychologistId, metaData);
+
+                await _context.Tokens.AddAsync(token, cancellationToken);
+
+                await _context.SaveChangesAsync(cancellationToken);
+
+                await tran.CommitAsync(cancellationToken);
+
+                return Result<AuthTokensDto>.Success(new AuthTokensDto(token.TokenAccess, token.TokenRefresh));
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed refresh token");
+
+                return Result<AuthTokensDto>.Failure(500, "Во время обновления токена, возникла ошибка");
+            }
+
         }
     }
 }
