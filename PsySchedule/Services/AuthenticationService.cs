@@ -107,7 +107,7 @@ namespace PsySchedule.Services
                                      .Where(tk => tk.TokenRefresh == refreshToken &&
                                             !tk.IsUsed &&
                                             !tk.IsRevoked &&
-                                             tk.ExpiresAt <= DateTime.UtcNow)
+                                             tk.ExpiresAt > DateTime.UtcNow)
                                      .ExecuteUpdateAsync(tk => tk.SetProperty(p => p.IsUsed, true), cancellationToken);
 
                 if (countRow == 0)

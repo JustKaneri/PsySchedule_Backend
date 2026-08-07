@@ -128,6 +128,10 @@ namespace PsyScheduleTests.ServiceTests
             Assert.Equal(3, context.Tokens.Count());
         }
 
+        /// <summary>
+        /// Корректное завершение сессии
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task Logout_Correct_Test()
         {
@@ -147,6 +151,10 @@ namespace PsyScheduleTests.ServiceTests
             Assert.True(context.Tokens.First().IsRevoked);
         }
 
+        /// <summary>
+        /// Завершение сессии два раза подряд
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task Logout_Twice_Test()
         {
@@ -167,6 +175,10 @@ namespace PsyScheduleTests.ServiceTests
             Assert.True(context.Tokens.First().IsRevoked);
         }
 
+        /// <summary>
+        /// Завершение не сущ. сессии
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task Logout_Not_Exist_Token_Test()
         {
@@ -180,6 +192,106 @@ namespace PsyScheduleTests.ServiceTests
 
             Assert.False(result.IsSuccess);
             Assert.Equal(401, result.Error.errorCode);
+        }
+
+        /// <summary>
+        /// Корректное обновление токенов
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task Refresh_Correct_Test()
+        {
+            var regRes = await Registration();
+
+            using var scopeAuth = CreateScope();
+
+            var serviceAuth = scopeAuth.ServiceProvider.GetRequiredService<IAuthenticationService>();
+
+            var result = await serviceAuth.RefreshTokenAsync(regRes.RefreshToken, usData, CancellationToken.None);
+
+            using var scopeVerification = CreateScope();
+            var context = scopeVerification.ServiceProvider.GetRequiredService<DataContext>();
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(2, context.Tokens.Count());
+            Assert.True(context.Tokens.First().IsUsed);
+        }
+
+        /// <summary>
+        /// Обновление использованого токена
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task Refresh_Used_Token_Test()
+        {
+            var regRes = await Registration();
+
+            using var scopeAuth = CreateScope();
+
+            var serviceAuth = scopeAuth.ServiceProvider.GetRequiredService<IAuthenticationService>();
+
+            var result = await serviceAuth.RefreshTokenAsync(regRes.RefreshToken, usData, CancellationToken.None);
+            var result2 = await serviceAuth.RefreshTokenAsync(regRes.RefreshToken, usData, CancellationToken.None);
+
+            using var scopeVerification = CreateScope();
+            var context = scopeVerification.ServiceProvider.GetRequiredService<DataContext>();
+
+            Assert.True(result.IsSuccess);
+            Assert.False(result2.IsSuccess);
+            Assert.Equal(2, context.Tokens.Count());
+            Assert.True(context.Tokens.First().IsUsed);
+        }
+
+        /// <summary>
+        /// Race-condition обновления токенов
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task Refresh_Parallel_Test()
+        {
+            var regRes = await Registration();
+
+            using var scopeAuth = CreateScope();
+
+            var serviceAuth = scopeAuth.ServiceProvider.GetRequiredService<IAuthenticationService>();
+
+            using var scope1 = CreateScope();
+            var service1 = scope1.ServiceProvider.GetRequiredService<IAuthenticationService>();
+
+            using var scope2 = CreateScope();
+            var service2 = scope2.ServiceProvider.GetRequiredService<IAuthenticationService>();
+
+            var result = service1.RefreshTokenAsync(regRes.RefreshToken, usData, CancellationToken.None);
+            var result2 = service2.RefreshTokenAsync(regRes.RefreshToken, usData, CancellationToken.None);
+
+            Task.WaitAll(result, result2);
+
+            using var scopeVerification = CreateScope();
+            var context = scopeVerification.ServiceProvider.GetRequiredService<DataContext>();
+
+            Assert.True(result.Result.IsSuccess ^ result2.Result.IsSuccess);
+            Assert.Equal(2, context.Tokens.Count());
+            Assert.True(context.Tokens.First().IsUsed);
+        }
+
+        /// <summary>
+        /// Обновление не сущ. токена
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task Refresh_Not_Exist_Test()
+        {
+            using var scopeAuth = CreateScope();
+
+            var serviceAuth = scopeAuth.ServiceProvider.GetRequiredService<IAuthenticationService>();
+
+            var result = await serviceAuth.RefreshTokenAsync("123", usData, CancellationToken.None);
+
+            using var scopeVerification = CreateScope();
+            var context = scopeVerification.ServiceProvider.GetRequiredService<DataContext>();
+
+            Assert.False(result.IsSuccess);
+            Assert.Equal(0, context.Tokens.Count());
         }
 
     }
