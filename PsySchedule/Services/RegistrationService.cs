@@ -70,7 +70,7 @@ namespace PsySchedule.Services
                 {
                     _logger.LogError(ex.Message, "Ошибка регистрации пользователя {Login}", registerDto.Login);
                     await tran.RollbackAsync(cancellationToken);
-                    return Result<AuthTokensDto>.Failure(500, "Не удалось создать пользователя");
+                    return Result<AuthTokensDto>.Failure(400, "Не удалось создать пользователя");
                 }
             }
 

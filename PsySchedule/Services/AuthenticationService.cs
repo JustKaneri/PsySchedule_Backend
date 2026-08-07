@@ -131,7 +131,7 @@ namespace PsySchedule.Services
             {
                 _logger.LogWarning(ex, "Failed refresh token");
 
-                return Result<AuthTokensDto>.Failure(500, "Во время обновления токена, возникла ошибка");
+                return Result<AuthTokensDto>.Failure(400, "Во время обновления токена, возникла ошибка");
             }
 
         }

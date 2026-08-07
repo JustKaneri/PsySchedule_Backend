@@ -68,7 +68,7 @@ namespace PsyScheduleTests.ServiceTests
             var result = await serviceAuth.AuthenticateAsync(authData, usData, CancellationToken.None);
 
             Assert.False(result.IsSuccess);
-            Assert.Equal(401, result.Error.errorCode);
+            Assert.Equal(401, result.Error.ErrorCode);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace PsyScheduleTests.ServiceTests
             var result = await serviceAuth.AuthenticateAsync(authData, usData, CancellationToken.None);
 
             Assert.False(result.IsSuccess);
-            Assert.Equal(401, result.Error.errorCode);
+            Assert.Equal(401, result.Error.ErrorCode);
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace PsyScheduleTests.ServiceTests
             var context = scopeVerification.ServiceProvider.GetRequiredService<DataContext>();
 
             Assert.False(result.IsSuccess);
-            Assert.Equal(401, result.Error.errorCode);
+            Assert.Equal(401, result.Error.ErrorCode);
         }
 
         /// <summary>

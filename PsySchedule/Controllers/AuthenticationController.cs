@@ -29,11 +29,12 @@ namespace PsySchedule.Controllers
         }
 
         /// <summary>
-        /// Авторизация
+        /// Аутентификация
         /// </summary>
         /// <returns></returns>
         [HttpPost("authentication")]
-        [ProducesResponseType(typeof(AuthTokensDto),200)]
+        [ProducesResponseType(typeof(AccessTokenDto),200)]
+        [ProducesResponseType(typeof(Error),401)]
         public async Task<IActionResult> Authentication([FromBody]AuthenticationDto authenticationData, CancellationToken cancellationToken)
         {
             var validationResult = _validatorAuth.Validate(authenticationData);
@@ -48,7 +49,7 @@ namespace PsySchedule.Controllers
             if (tokens.IsSuccess)
                 return Ok(new AccessTokenDto(tokens.Value.AccessToken));
 
-            return BadRequest(tokens.Error.errorMessage);
+            return Unauthorized(tokens.Error);
         }
 
         /// <summary>
@@ -57,6 +58,7 @@ namespace PsySchedule.Controllers
         /// <returns></returns>
         [HttpPost("register")]
         [ProducesResponseType(typeof(AccessTokenDto), 201)]
+        [ProducesResponseType(typeof(Error), 400)]
         public async Task<IActionResult> Register([FromBody]RegisterPsychologistDto registerData, CancellationToken cancellationToken)
         {
 
@@ -70,9 +72,20 @@ namespace PsySchedule.Controllers
             var result = await _registerService.RegisterPsychologistAsync(registerData, userData, cancellationToken);
 
             if (result.IsSuccess)
-                return Created(nameof(AccessTokenDto), new AccessTokenDto(result.Value.AccessToken));
+            {
+                Response.Cookies.Append("rftkn", result.Value.RefreshToken, new CookieOptions()
+                {
+                    HttpOnly = true, 
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddMonths(1)
+                });
 
-            return BadRequest(result.Error.errorMessage);
+                return Created(nameof(AccessTokenDto), new AccessTokenDto(result.Value.AccessToken));
+            }
+
+
+            return BadRequest(result.Error);
         }
 
         /// <summary>
@@ -80,7 +93,10 @@ namespace PsySchedule.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("refresh")]
-        [ProducesResponseType(typeof(AuthTokensDto), 200)]
+        [ProducesResponseType(typeof(AccessTokenDto), 200)]
+        [ProducesResponseType(typeof(Error), 400)]
+        [ProducesResponseType(typeof(Error), 401)]
+        [ProducesResponseType(typeof(Error), 409)]
         public async Task<IActionResult> Refresh(CancellationToken cancellationToken)
         {
             Request.Cookies.TryGetValue("rftkn", out string refreshToken);
@@ -92,10 +108,31 @@ namespace PsySchedule.Controllers
 
             var result = await _authenticationService.RefreshTokenAsync(refreshToken, userData, cancellationToken);
 
-            if(result.IsSuccess)
-                return Created(nameof(AccessTokenDto), new AccessTokenDto(result.Value.AccessToken));
+            if (result.IsSuccess)
+            {
+                Response.Cookies.Append("rftkn", result.Value.RefreshToken, new CookieOptions()
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddMonths(1)
+                });
 
-            return BadRequest(result.Error.errorMessage);
+                return Created(nameof(AccessTokenDto), new AccessTokenDto(result.Value.AccessToken));
+            }
+
+
+            switch (result.Error.ErrorCode)
+            {
+                case 400:
+                    return BadRequest(result.Error);
+                case 401:
+                    return Unauthorized(result.Error);
+                case 409:
+                    return Conflict(result.Error);
+                default:
+                    return BadRequest();
+            }
         }
 
         /// <summary>
@@ -103,6 +140,7 @@ namespace PsySchedule.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("logout")]
+        [ProducesResponseType(typeof(Error), 401)]
         public async Task<IActionResult> Logout(CancellationToken cancellationToken)
         {
             Request.Cookies.TryGetValue("rftkn", out string refreshToken);
@@ -113,9 +151,13 @@ namespace PsySchedule.Controllers
             var result = await _authenticationService.LogoutAsync(refreshToken, cancellationToken);
 
             if (result.IsSuccess)
+            {
+                Response.Cookies.Delete("rftkn");
                 return Ok();
+            }
 
-            return BadRequest(result.Error.errorMessage);
+
+            return Unauthorized(result.Error);
         }
     }
 }
