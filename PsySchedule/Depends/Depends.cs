@@ -1,4 +1,6 @@
-﻿using PsySchedule.Interfaces;
+﻿using PsySchedule.Dto;
+using PsySchedule.Interfaces;
+using PsySchedule.Mapper;
 using PsySchedule.Middlewares;
 using PsySchedule.Models;
 using PsySchedule.Services;
@@ -13,6 +15,8 @@ namespace PsySchedule.Depends
             builder.Services.Configure<TokenParameters>(builder.Configuration.GetSection("Jwt"));
 
             builder.Services.AddTransient<UseExceptionHandler>();
+
+            builder.Services.AddScoped<IMapper<ScheduleTemplateDayDto,ScheduleTemplate,int>, ScheduleTemplateMapper>();
 
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IRegistrationService, RegistrationService>();

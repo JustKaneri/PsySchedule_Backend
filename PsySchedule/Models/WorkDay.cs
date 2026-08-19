@@ -28,6 +28,8 @@ namespace PsySchedule.Models
 
         public TimeOnly BreakFinishedAt { get; set; }
 
+        public int Gap { get; set; }
+
         public int ScheduleTemplateId { get; set; }
 
         public ScheduleTemplate ScheduleTemplate { get; set; }  
