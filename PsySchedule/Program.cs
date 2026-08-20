@@ -1,6 +1,7 @@
 using FluentValidation;
 using Prometheus;
 using PsySchedule.Depends;
+using PsySchedule.Doc;
 using PsySchedule.Middlewares;
 using PsySchedule.Validations;
 using Scalar.AspNetCore;
@@ -18,6 +19,12 @@ builder.UseDepends();
 
 builder.Services.AddValidatorsFromAssemblyContaining<PsychologistRegistrationValidator>();
 
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+    options.AddOperationTransformer<BearerOperationTransformer>();
+});
+
 Log.Information("Start application");
 
 var app = builder.Build();
@@ -25,7 +32,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.MapScalarApiReference(options =>
+    {
+        options.AddPreferredSecuritySchemes("Bearer");
+    });
 }
 
 app.UseMiddleware<UseExceptionHandler>();
