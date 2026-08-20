@@ -30,7 +30,7 @@ namespace PsySchedule.Services
 
             var subject = new ClaimsIdentity(new[]
             {
-                new Claim(ClaimTypes.NameIdentifier,userId.ToString()),
+                new Claim("Id", userId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, EpochTime.GetIntDate(DateTime.UtcNow).ToString(), ClaimValueTypes.Integer64),
             });

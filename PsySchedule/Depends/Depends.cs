@@ -23,6 +23,9 @@ namespace PsySchedule.Depends
             builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
+            builder.Services.AddScoped<IScheduleTemplateService, ScheduleTemplateService>();
+            builder.Services.AddScoped<IDayService, DayService>();
+
             return builder;
         }
     }

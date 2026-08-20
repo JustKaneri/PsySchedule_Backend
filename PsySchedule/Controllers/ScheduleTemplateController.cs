@@ -60,7 +60,7 @@ namespace PsySchedule.Controllers
             {
                 400 => BadRequest(templates.Error),
                 401 => Unauthorized(templates.Error),
-                404 => Conflict(templates.Error),
+                404 => NotFound(templates.Error),
                 _ => BadRequest()
             };
         }
