@@ -20,8 +20,8 @@ namespace PsySchedule.Validations
             RuleFor(p => p)
                 .Must(p =>
                 {
-                    var start = TimeOnly.Parse(p.StartedAt);
-                    var end = TimeOnly.Parse(p.FinishedAt);
+                    if (!TimeOnly.TryParse(p.StartedAt, out TimeOnly start)) return false;
+                    if (!TimeOnly.TryParse(p.FinishedAt, out TimeOnly end)) return false;
 
                     return start < end;
 
