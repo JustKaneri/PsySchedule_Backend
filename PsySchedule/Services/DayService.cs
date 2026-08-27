@@ -23,7 +23,7 @@ namespace PsySchedule.Services
 
             List<WorkDay> workDays = new();
 
-            for(DateOnly date = from; date <= to; date = date.AddDays(1))
+            for(DateOnly date = from; date < to; date = date.AddDays(1))
             {
                 cancellationToken.ThrowIfCancellationRequested();
 

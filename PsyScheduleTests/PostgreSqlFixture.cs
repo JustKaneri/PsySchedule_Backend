@@ -3,7 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using PsySchedule.Context;
+using PsySchedule.Dto;
 using PsySchedule.Interfaces;
+using PsySchedule.Mapper;
 using PsySchedule.Models;
 using PsySchedule.Services;
 using Respawn;
@@ -73,6 +75,9 @@ namespace PsyScheduleTests
             services.AddScoped<IRegistrationService, RegistrationService>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IScheduleTemplateService,  ScheduleTemplateService>();
+            services.AddScoped<IDayService, DayService>();
+            services.AddScoped<IMapper<ScheduleTemplateDayDto, ScheduleTemplate, int>, ScheduleTemplateMapper>();
         }
 
         private async Task InitDataBaseAsync()

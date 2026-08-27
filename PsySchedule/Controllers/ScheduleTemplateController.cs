@@ -138,7 +138,7 @@ namespace PsySchedule.Controllers
             var template = await _scheduleTemplateService.UpdateOrCreateAsync(scheduleTemplate, Id, cancellationToken);
 
             if (template.IsSuccess)
-                return Ok(template);
+                return Ok();
 
             return template.Error.ErrorCode switch
             {

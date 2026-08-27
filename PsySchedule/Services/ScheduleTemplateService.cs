@@ -58,7 +58,7 @@ namespace PsySchedule.Services
                                     && pgEx.SqlState == PostgresErrorCodes.UniqueViolation)
             {
                 _logger.LogError(ex.Message, "Schedule templates exist for psychologist {PsychologistId}", psychologistId);
-                return Result.Failure(400, "Для психолога уже существуют шаблоны расписания");
+                return Result.Failure(409, "Для психолога уже существуют шаблоны расписания");
             }
             catch(Exception)
             {
@@ -82,11 +82,9 @@ namespace PsySchedule.Services
                 return Result<ScheduleTemplatesDto>.Failure(404, "Расписание не найдено");
             }
 
-            List<ScheduleTemplateDayDto> scheduleTemplates = new List<ScheduleTemplateDayDto>();
-
             var days = templates.Select(_mapper.FromEntity).ToList();
 
-            return Result<ScheduleTemplatesDto>.Success(new ScheduleTemplatesDto(scheduleTemplates));
+            return Result<ScheduleTemplatesDto>.Success(new ScheduleTemplatesDto(days));
         }
 
         public async Task<Result> UpdateOrCreateAsync(ScheduleTemplateDayDto scheduleTemplate, int psychologistId, CancellationToken cancellationToken)
