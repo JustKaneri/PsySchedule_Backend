@@ -47,7 +47,6 @@ namespace PsySchedule.Context
             modelBuilder.Entity<WorkDay>().Property(wd => wd.State)
                                           .HasConversion<string>()
                                           .HasDefaultValue(WorkDayState.Generated);
-;
         }
     }
 }
