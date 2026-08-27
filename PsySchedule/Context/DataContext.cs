@@ -25,8 +25,9 @@ namespace PsySchedule.Context
                         .WithOne(st => st.Psychologist)
                         .HasForeignKey<Psychologist>(ps => ps.ScheduleTemplateId);
 
-            modelBuilder.Entity<ScheduleTemplate>().Property(st => st.Weekend).HasConversion<string>();
+            modelBuilder.Entity<ScheduleTemplate>().Property(st => st.Weekday).HasConversion<string>();
             modelBuilder.Entity<ScheduleTemplate>().Property(st => st.Gap).HasDefaultValue(15);
+            modelBuilder.Entity<ScheduleTemplate>().HasIndex(st => new { st.PsychologistId, st.Weekday }).IsUnique();
 
             modelBuilder.Entity<Client>().Property(c => c.Rating).HasDefaultValue(1);
 
@@ -47,6 +48,8 @@ namespace PsySchedule.Context
             modelBuilder.Entity<WorkDay>().Property(wd => wd.State)
                                           .HasConversion<string>()
                                           .HasDefaultValue(WorkDayState.Generated);
+
+            modelBuilder.Entity<WorkDay>().HasIndex(wd => new { wd.Date, wd.PsychologistId }).IsUnique();
         }
     }
 }

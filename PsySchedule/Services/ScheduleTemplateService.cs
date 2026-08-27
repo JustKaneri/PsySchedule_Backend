@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EntityFramework.Exceptions.Common;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using PsySchedule.Context;
 using PsySchedule.Dto;
 using PsySchedule.Interfaces;
@@ -35,7 +37,7 @@ namespace PsySchedule.Services
             if(await _context.ScheduleTemplates.AnyAsync(p => p.PsychologistId == psychologistId))
             {
                 _logger.LogWarning("Schedule templates already exist for psychologist {PsychologistId}", psychologistId);
-                return Result.Failure(409, "Для психолога уже существуют шаблоны расписания.");
+                return Result.Failure(409, "Для психолога уже существуют шаблоны расписания");
             }
 
 
@@ -46,8 +48,23 @@ namespace PsySchedule.Services
 
             _dayService.AddDaysFromTemplate(templates, dateFrom, dateTo, cancellationToken);
 
-            await _context.AddRangeAsync(templates, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            try
+            {
+                await _context.AddRangeAsync(templates, cancellationToken);
+
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is PostgresException pgEx
+                                    && pgEx.SqlState == PostgresErrorCodes.UniqueViolation)
+            {
+                _logger.LogError(ex.Message, "Schedule templates exist for psychologist {PsychologistId}", psychologistId);
+                return Result.Failure(400, "Для психолога уже существуют шаблоны расписания");
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+
 
             return Result.Success();
         }
@@ -81,7 +98,7 @@ namespace PsySchedule.Services
             }
 
 
-            var template = await _context.ScheduleTemplates.FirstOrDefaultAsync(st => st.PsychologistId == psychologistId && st.Weekend == (WeekDay)scheduleTemplate.Weekday,cancellationToken);
+            var template = await _context.ScheduleTemplates.FirstOrDefaultAsync(st => st.PsychologistId == psychologistId && st.Weekday == (WeekDay)scheduleTemplate.Weekday,cancellationToken);
 
             if(template == null)
             {

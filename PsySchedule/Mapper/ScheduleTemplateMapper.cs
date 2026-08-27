@@ -11,7 +11,7 @@ namespace PsySchedule.Mapper
         {
             return new ScheduleTemplate()
             {
-                Weekend = (WeekDay)dto.Weekday,
+                Weekday = (WeekDay)dto.Weekday,
                 StartedAt = TimeOnly.Parse(dto.WorkTime.StartedAt),
                 FinishedAt = TimeOnly.Parse(dto.WorkTime.FinishedAt),
                 BreakStartedAt = TimeOnly.Parse(dto.BreakTime.StartedAt),
@@ -23,7 +23,7 @@ namespace PsySchedule.Mapper
 
         public ScheduleTemplateDayDto FromEntity(ScheduleTemplate entity)
         {
-            return new((int)entity.Weekend,
+            return new((int)entity.Weekday,
                       new TimeRange(
                           entity.StartedAt.ToString("HH:mm"),
                           entity.FinishedAt.ToString("HH:mm")),

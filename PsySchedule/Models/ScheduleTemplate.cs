@@ -16,7 +16,7 @@ namespace PsySchedule.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public WeekDay Weekend { get; set; }
+        public WeekDay Weekday { get; set; }
 
         public TimeOnly StartedAt { get; set; }
 

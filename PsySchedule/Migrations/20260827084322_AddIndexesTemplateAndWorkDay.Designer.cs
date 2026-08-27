@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PsySchedule.Context;
@@ -11,9 +12,11 @@ using PsySchedule.Context;
 namespace PsySchedule.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20260827084322_AddIndexesTemplateAndWorkDay")]
+    partial class AddIndexesTemplateAndWorkDay
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,7 +236,7 @@ namespace PsySchedule.Migrations
                     b.Property<TimeOnly>("StartedAt")
                         .HasColumnType("time without time zone");
 
-                    b.Property<string>("Weekday")
+                    b.Property<string>("Weekend")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -241,7 +244,7 @@ namespace PsySchedule.Migrations
 
                     b.HasIndex("PsychologistId");
 
-                    b.HasIndex("PsychologistId", "Weekday")
+                    b.HasIndex("PsychologistId", "Weekend")
                         .IsUnique();
 
                     b.ToTable("ScheduleTemplate");
@@ -385,7 +388,7 @@ namespace PsySchedule.Migrations
                         .HasColumnType("text")
                         .HasDefaultValue("Generated");
 
-                    b.Property<int>("Weekday")
+                    b.Property<int>("Weekend")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");

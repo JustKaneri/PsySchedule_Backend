@@ -19,7 +19,7 @@ namespace PsySchedule.Services
 
         public void AddDaysFromTemplate(IEnumerable<ScheduleTemplate> templates, DateOnly from, DateOnly to, CancellationToken cancellationToken)
         {
-            var templatesByDay = templates.ToDictionary(template => template.Weekend);
+            var templatesByDay = templates.ToDictionary(template => template.Weekday);
 
             List<WorkDay> workDays = new();
 
