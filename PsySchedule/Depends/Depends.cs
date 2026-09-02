@@ -17,6 +17,7 @@ namespace PsySchedule.Depends
             builder.Services.AddTransient<UseExceptionHandler>();
 
             builder.Services.AddScoped<IMapper<ScheduleTemplateDayDto,ScheduleTemplate,int>, ScheduleTemplateMapper>();
+            builder.Services.AddScoped<IMapper<ServiceResponse, Service>, ServiceMapper>();
 
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IRegistrationService, RegistrationService>();
@@ -25,6 +26,8 @@ namespace PsySchedule.Depends
 
             builder.Services.AddScoped<IScheduleTemplateService, ScheduleTemplateService>();
             builder.Services.AddScoped<IDayService, DayService>();
+
+            builder.Services.AddScoped<IServiceManager, ServiceManager>();
 
             return builder;
         }

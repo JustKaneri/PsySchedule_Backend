@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
@@ -16,12 +17,18 @@ namespace PsySchedule.Models
         public required string Name { get; set; }
 
         [Range(0, 500_000)]
-        public int Price { get; set; }
+        public decimal Price { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+
+        public int Version { get; set; }
+
+        public DateTimeOffset? UpdateAt { get; set; }
 
         public int PsychologistId { get; set; }
 
         public Psychologist Psychologist { get; set; }
+
+        public List<Appointment> Appointments { get; set; } 
     }
 }
