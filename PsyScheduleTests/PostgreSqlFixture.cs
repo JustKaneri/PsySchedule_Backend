@@ -78,6 +78,8 @@ namespace PsyScheduleTests
             services.AddScoped<IScheduleTemplateService,  ScheduleTemplateService>();
             services.AddScoped<IDayService, DayService>();
             services.AddScoped<IMapper<ScheduleTemplateDayDto, ScheduleTemplate, int>, ScheduleTemplateMapper>();
+            services.AddScoped<IServiceManager,  ServiceManager>();
+            services.AddScoped<IMapper<ServiceResponse, Service>, ServiceMapper>();
         }
 
         private async Task InitDataBaseAsync()

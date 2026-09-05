@@ -102,6 +102,8 @@ namespace PsySchedule.Services
                 return Result.Failure(403, "У вас нет прав для удаления данной услуги");
             }
 
+            int newVersion = service.Version + 1;
+
             var updateRow = await _context.Services
                                         .Where(s => s.Id == dataRequest.Id &&
                                                s.PsychologistId == psyId &&
@@ -110,7 +112,7 @@ namespace PsySchedule.Services
                                         {
                                             s.SetProperty(n => n.Name, dataRequest.Name);
                                             s.SetProperty(p => p.Price, dataRequest.Price);
-                                            s.SetProperty(v => v.Version, service.Version + 1);
+                                            s.SetProperty(v => v.Version, v => v.Version + 1);
                                             s.SetProperty(d => d.UpdateAt, DateTimeOffset.UtcNow);
                                         },cancellationToken);
 
