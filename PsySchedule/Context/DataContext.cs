@@ -58,6 +58,8 @@ namespace PsySchedule.Context
             modelBuilder.Entity<WorkDay>().HasIndex(wd => new { wd.Date, wd.PsychologistId }).IsUnique();
 
             modelBuilder.Entity<Service>().HasIndex(s => new { s.PsychologistId });
+
+            modelBuilder.Entity<Vacation>().HasIndex(v => new { v.StartedAt, v.FinishedAt });
         }
     }
 }

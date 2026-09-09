@@ -1,4 +1,5 @@
-﻿using PsySchedule.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using PsySchedule.Context;
 using PsySchedule.Dto;
 using PsySchedule.Interfaces;
 using PsySchedule.Models;
@@ -23,7 +24,7 @@ namespace PsySchedule.Services
 
             List<WorkDay> workDays = new();
 
-            for(DateOnly date = from; date < to; date = date.AddDays(1))
+            for (DateOnly date = from; date < to; date = date.AddDays(1))
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -71,6 +72,19 @@ namespace PsySchedule.Services
                 DayOfWeek.Sunday => WeekDay.Sunday,
                 _ => throw new ArgumentOutOfRangeException()
             };
+        }
+
+        public async Task<Result> RemoveRangeAsync(int psyId, DateOnly from, DateOnly to, CancellationToken cancellationToken)
+        {
+
+            await _context.WorkDays
+                .Where(d =>
+                    d.PsychologistId == psyId &&
+                    d.Date >= from &&
+                    d.Date <= to)
+                .ExecuteDeleteAsync(cancellationToken);
+
+            return Result.Success();
         }
     }
 }

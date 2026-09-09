@@ -29,6 +29,8 @@ namespace PsySchedule.Depends
 
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
 
+            builder.Services.AddScoped<IVacationService, VacationService>();
+
             return builder;
         }
     }

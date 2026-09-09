@@ -31,5 +31,15 @@ namespace PsySchedule.Interfaces
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public Task<Result> UpdateDayAsync(ScheduleDayDto dto, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Удалить дни
+        /// </summary>
+        /// <param name="psyId"></param>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<Result> RemoveRangeAsync(int psyId, DateOnly from, DateOnly to, CancellationToken cancellationToken);
     }
 }
