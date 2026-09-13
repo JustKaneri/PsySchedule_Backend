@@ -69,7 +69,7 @@ namespace PsySchedule.Services
             return Result.Success();
         }
 
-        public async Task<Result<ScheduleTemplatesDto>> GetAsync(int psychologistId, CancellationToken cancellationToken)
+        public async Task<Result<ScheduleTemplateDto>> GetAsync(int psychologistId, CancellationToken cancellationToken)
         {
             var templates = await _context.ScheduleTemplates
                                           .AsNoTracking()
@@ -79,12 +79,12 @@ namespace PsySchedule.Services
             if (templates.Count() == 0)
             {
                 _logger.LogWarning("Schedule templates not exist for psychologist {PsychologistId}", psychologistId);
-                return Result<ScheduleTemplatesDto>.Failure(404, "Расписание не найдено");
+                return Result<ScheduleTemplateDto>.Failure(404, "Расписание не найдено");
             }
 
             var days = templates.Select(_mapper.FromEntity).ToList();
 
-            return Result<ScheduleTemplatesDto>.Success(new ScheduleTemplatesDto(days));
+            return Result<ScheduleTemplateDto>.Success(new ScheduleTemplateDto(days));
         }
 
         public async Task<Result> UpdateOrCreateAsync(ScheduleTemplateDayDto scheduleTemplate, int psychologistId, CancellationToken cancellationToken)

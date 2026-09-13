@@ -33,6 +33,6 @@ namespace PsySchedule.Interfaces
         /// <param name="psychologistId">Id специалиста</param>
         /// <param name="cancellationToken">Токен отмены</param>
         /// <returns>IEnumerable ScheduleTemplateDto</returns>
-        public Task<Result<ScheduleTemplatesDto>> GetAsync(int psychologistId, CancellationToken cancellationToken);
+        public Task<Result<ScheduleTemplateDto>> GetAsync(int psychologistId, CancellationToken cancellationToken);
     }
 }

@@ -38,7 +38,7 @@ namespace PsySchedule.Controllers
         /// <returns></returns>
         [HttpGet("templates")]
         [Authorize]
-        [ProducesResponseType(typeof(ScheduleTemplatesDto),200)]
+        [ProducesResponseType(typeof(ScheduleTemplateDto),200)]
         [ProducesResponseType(typeof(Error), 401)]
         [ProducesResponseType(typeof(Error), 404)]
         public async Task<IActionResult> GetScheduleTemplate(CancellationToken cancellationToken)
@@ -77,7 +77,7 @@ namespace PsySchedule.Controllers
         [ProducesResponseType(typeof(List<ValidationFailure>), 400)]
         [ProducesResponseType(typeof(Error), 401)]
         [ProducesResponseType(typeof(Error), 409)]
-        public async Task<IActionResult> CreateScheduleTemplate(ScheduleTemplatesDto scheduleTemplate, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateScheduleTemplate(ScheduleTemplateDto scheduleTemplate, CancellationToken cancellationToken)
         {
 
             var validate = _validatorTemplates.Validate(scheduleTemplate.TemplateDays);
