@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PsySchedule.Models
@@ -25,13 +26,11 @@ namespace PsySchedule.Models
         [Range(0,1)]
         public double Rating { get; set; } = 1;
 
-        public long TelegramId { get; set; }
-
-        public string? TelegramName { get; set; }
-
-        public long TelegramChatId { get; set; }
-
         public string TimeZone { get; set; }
+
+        public int? TelegramId { get; set; }
+
+        public ClientTelegram? Telegram { get; set; }
 
         public DateTimeOffset RegisteredAt { get; set; } = DateTimeOffset.UtcNow;
 

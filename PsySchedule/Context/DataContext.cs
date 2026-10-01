@@ -9,6 +9,7 @@ namespace PsySchedule.Context
         public DbSet<Appointment> Appointments { get; set; }   
         public DbSet<AppointmentНistory> AppointmentНistories { get; set; }
         public DbSet<Client> Clients { get; set; }
+        public DbSet<ClientTelegram> ClientTelegram { get; set; }
         public DbSet<Psychologist> Psychologists  { get; set; }
         public DbSet<ScheduleTemplate> ScheduleTemplates { get; set; }
         public DbSet<Service> Services { get; set; } 
@@ -60,6 +61,9 @@ namespace PsySchedule.Context
             modelBuilder.Entity<Service>().HasIndex(s => new { s.PsychologistId });
 
             modelBuilder.Entity<Vacation>().HasIndex(v => new { v.StartedAt, v.FinishedAt });
+
+            modelBuilder.Entity<Client>().HasIndex(c => new { c.TelegramId });
+            modelBuilder.Entity<ClientTelegram>().HasIndex(ct => new { ct.TelegramChatId });
         }
     }
 }
