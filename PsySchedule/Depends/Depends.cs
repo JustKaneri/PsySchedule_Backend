@@ -31,6 +31,8 @@ namespace PsySchedule.Depends
 
             builder.Services.AddScoped<IVacationService, VacationService>();
 
+            builder.Services.AddScoped<IClientCreater, ClientCreater>();
+
             return builder;
         }
     }

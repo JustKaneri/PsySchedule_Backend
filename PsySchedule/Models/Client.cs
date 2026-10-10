@@ -28,7 +28,7 @@ namespace PsySchedule.Models
 
         public string TimeZone { get; set; }
 
-        public int? TelegramId { get; set; }
+        public long? TelegramId { get; set; }
 
         public ClientTelegram? Telegram { get; set; }
 

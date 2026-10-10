@@ -3,12 +3,14 @@ using Prometheus;
 using PsySchedule.Depends;
 using PsySchedule.Doc;
 using PsySchedule.Middlewares;
+using PsySchedule.Services.Grpc;
 using PsySchedule.Validations;
 using Scalar.AspNetCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddGrpc();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
@@ -50,5 +52,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGrpcService<ClientTelegramGrpcService>();
 
 app.Run();
