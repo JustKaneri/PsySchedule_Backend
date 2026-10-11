@@ -140,10 +140,7 @@ namespace PsySchedule.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<int?>("TelegramId")
-                        .HasColumnType("integer");
-
-                    b.Property<long?>("TelegramId1")
+                    b.Property<long?>("TelegramId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("TimeZone")
@@ -153,8 +150,6 @@ namespace PsySchedule.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("TelegramId");
-
-                    b.HasIndex("TelegramId1");
 
                     b.ToTable("Client");
                 });
@@ -492,7 +487,7 @@ namespace PsySchedule.Migrations
                 {
                     b.HasOne("PsySchedule.Models.ClientTelegram", "Telegram")
                         .WithMany()
-                        .HasForeignKey("TelegramId1");
+                        .HasForeignKey("TelegramId");
 
                     b.Navigation("Telegram");
                 });

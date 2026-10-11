@@ -1,12 +1,9 @@
 ﻿using Grpc.Core;
 using PsySchedule.GRPC;
 using PsySchedule.Interfaces;
-using PsySchedule.Models;
 using DtoRequest = PsySchedule.Dto.ClientTelegramRequest;
 using DtoTelegramData = PsySchedule.Dto.TelegramData;
 using GrpcClient = PsySchedule.GRPC;
-using GrpcRequest = PsySchedule.GRPC.ClientTelegramRequest;
-using GrpcTelegramData = PsySchedule.GRPC.TelegramData;
 
 
 namespace PsySchedule.Services.Grpc
