@@ -17,5 +17,10 @@ namespace PsySchedule.Health
             "authentication_success_total", // имя метрики
             "Total count of authentication success" // описание
         );
+
+        public static readonly Counter RegistrationsTelegramCountMetric = Metrics.CreateCounter(
+            "registrations_telegram_success_total", // имя метрики
+            "Total count of registrations success" // описание
+        );
     }
 }

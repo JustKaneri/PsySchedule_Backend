@@ -3,8 +3,11 @@ using PsySchedule.Models;
 
 namespace PsySchedule.Interfaces
 {
-    public interface IClientCreater
+    /// <summary>
+    /// Сервис для регистрации клиента
+    /// </summary>
+    public interface IClientService<RequestType>
     {
-        public Task<Result> CreateAsync(ClientTelegramRequest request, CancellationToken cancellationToken);
+        public Task<Result> CreateAsync(RequestType request, CancellationToken cancellationToken);
     }
 }

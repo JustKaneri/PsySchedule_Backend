@@ -149,7 +149,8 @@ namespace PsySchedule.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TelegramId");
+                    b.HasIndex("TelegramId")
+                        .IsUnique();
 
                     b.ToTable("Client");
                 });

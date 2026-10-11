@@ -10,9 +10,9 @@ namespace PsySchedule.Services.Grpc
 {
     public class ClientTelegramGrpcService : GrpcClient.ClientTelegramService.ClientTelegramServiceBase
     {
-        private readonly IClientCreater _service;
+        private readonly IClientService<DtoRequest> _service;
 
-        public ClientTelegramGrpcService(IClientCreater clientTelegramService)
+        public ClientTelegramGrpcService(IClientService<DtoRequest> clientTelegramService)
         {
             _service = clientTelegramService;
         }

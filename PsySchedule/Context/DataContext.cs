@@ -62,7 +62,7 @@ namespace PsySchedule.Context
 
             modelBuilder.Entity<Vacation>().HasIndex(v => new { v.StartedAt, v.FinishedAt });
 
-            modelBuilder.Entity<Client>().HasIndex(c => new { c.TelegramId });
+            modelBuilder.Entity<Client>().HasIndex(c => new { c.TelegramId }).IsUnique();
             modelBuilder.Entity<ClientTelegram>().HasIndex(ct => new { ct.TelegramChatId });
         }
     }
