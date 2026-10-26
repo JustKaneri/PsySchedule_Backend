@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PsySchedule.Dto;
 using PsySchedule.Interfaces;
@@ -12,9 +11,9 @@ namespace PsySchedule.Controllers
     public class VacationController : BaseController
     {
         private readonly IVacationService _service;
-        private readonly IValidator<CreateVacationRequest> _validator;
+        private readonly IValidatorFactory _validator;
 
-        public VacationController(IVacationService service,IValidator<CreateVacationRequest> validator)
+        public VacationController(IVacationService service, IValidatorFactory validator)
         {
             _service = service;
             _validator = validator;

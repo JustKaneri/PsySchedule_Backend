@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PsySchedule.Dto;
 using PsySchedule.Interfaces;
 using PsySchedule.Models;
@@ -15,16 +14,13 @@ namespace PsySchedule.Controllers
     public class AuthenticationController : Controller
     {
         private readonly IRegistrationService _registerService;
-        private readonly IValidator<RegisterPsychologistDto> _validatorRegistry;
-        private readonly IValidator<AuthenticationDto> _validatorAuth;
+        private readonly IValidatorFactory _validator;
         private readonly IAuthenticationService _authenticationService;
 
-        public AuthenticationController(IRegistrationService registerService, IValidator<RegisterPsychologistDto> validatorRegistry, 
-                                        IValidator<AuthenticationDto> validatorAuth, IAuthenticationService authenticationService)
+        public AuthenticationController(IRegistrationService registerService, IValidatorFactory validator, IAuthenticationService authenticationService)
         {
             _registerService = registerService;
-            _validatorRegistry = validatorRegistry;
-            _validatorAuth = validatorAuth;
+            _validator = validator;
             _authenticationService = authenticationService;
         }
 
@@ -37,7 +33,7 @@ namespace PsySchedule.Controllers
         [ProducesResponseType(typeof(Error),401)]
         public async Task<IActionResult> Authentication([FromBody]AuthenticationDto authenticationData, CancellationToken cancellationToken)
         {
-            var validationResult = _validatorAuth.Validate(authenticationData);
+            var validationResult = _validator.Validate(authenticationData);
 
             if (!validationResult.IsValid)
                 return BadRequest(validationResult.Errors);
@@ -62,7 +58,7 @@ namespace PsySchedule.Controllers
         public async Task<IActionResult> Register([FromBody]RegisterPsychologistDto registerData, CancellationToken cancellationToken)
         {
 
-            var validationResult = _validatorRegistry.Validate(registerData);
+            var validationResult = _validator.Validate(registerData);
 
             if(!validationResult.IsValid)
                 return BadRequest(validationResult.Errors);

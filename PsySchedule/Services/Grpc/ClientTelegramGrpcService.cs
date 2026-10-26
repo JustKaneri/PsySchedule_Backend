@@ -12,9 +12,9 @@ namespace PsySchedule.Services.Grpc
     public class ClientTelegramGrpcService : GrpcClient.ClientTelegramService.ClientTelegramServiceBase
     {
         private readonly IClientService<DtoRequest> _service;
-        private readonly IValidator<ClientTelegramRequest> _validator;
+        private readonly Interfaces.IValidatorFactory _validator;
 
-        public ClientTelegramGrpcService(IClientService<DtoRequest> clientTelegramService, IValidator<GrpcClient.ClientTelegramRequest> validator)
+        public ClientTelegramGrpcService(IClientService<DtoRequest> clientTelegramService, Interfaces.IValidatorFactory validator)
         {
             _service = clientTelegramService;
             _validator = validator;

@@ -19,8 +19,6 @@ builder.UseSerilog();
 builder.UseAuthentication();
 builder.UseDepends();
 
-builder.Services.AddValidatorsFromAssemblyContaining<PsychologistRegistrationValidator>();
-
 builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();

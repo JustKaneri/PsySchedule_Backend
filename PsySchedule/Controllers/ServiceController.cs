@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PsySchedule.Dto;
 using PsySchedule.Interfaces;
@@ -13,14 +12,12 @@ namespace PsySchedule.Controllers
     public class ServiceController : Controller
     {
         private readonly IServiceManager _manager;
-        private readonly IValidator<ServiceDto> _validator;
-        private readonly IValidator<UpdateServiceRequest> _validatorUpdater;
+        private readonly IValidatorFactory _validator;
 
-        public ServiceController(IServiceManager manager, IValidator<ServiceDto> validator, IValidator<UpdateServiceRequest> validatorUpdater)
+        public ServiceController(IServiceManager manager, IValidatorFactory validator)
         {
             _manager = manager;
             _validator = validator;
-            _validatorUpdater = validatorUpdater;
         }
 
         /// <summary>
@@ -100,7 +97,7 @@ namespace PsySchedule.Controllers
         [ProducesResponseType(typeof(Error), 409)]
         public async Task<IActionResult> Update([FromBody]UpdateServiceRequest request,CancellationToken cancellationToken)
         {
-            var valid = _validatorUpdater.Validate(request);
+            var valid = _validator.Validate(request);
 
             if (!valid.IsValid)
                 return BadRequest(valid.Errors);
