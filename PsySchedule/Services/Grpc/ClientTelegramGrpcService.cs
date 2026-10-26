@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using FluentValidation;
+using Grpc.Core;
 using PsySchedule.GRPC;
 using PsySchedule.Interfaces;
 using DtoRequest = PsySchedule.Dto.ClientTelegramRequest;
@@ -11,22 +12,21 @@ namespace PsySchedule.Services.Grpc
     public class ClientTelegramGrpcService : GrpcClient.ClientTelegramService.ClientTelegramServiceBase
     {
         private readonly IClientService<DtoRequest> _service;
+        private readonly IValidator<ClientTelegramRequest> _validator;
 
-        public ClientTelegramGrpcService(IClientService<DtoRequest> clientTelegramService)
+        public ClientTelegramGrpcService(IClientService<DtoRequest> clientTelegramService, IValidator<GrpcClient.ClientTelegramRequest> validator)
         {
             _service = clientTelegramService;
+            _validator = validator;
         }
 
         public override async Task<GrpcClient.ClientTelegramResponse> CreateClientTelegram( GrpcClient.ClientTelegramRequest request, ServerCallContext context)
         {
-            if (request.TelegramData is null)
-            {
-                throw new RpcException(
-                    new Status(
-                        StatusCode.InvalidArgument,
-                        "TelegramData is required."));
-            }
+            var resultValidation = _validator.Validate(request);
 
+            if (resultValidation.IsValid)
+                throw new RpcException(new Status(StatusCode.InvalidArgument, resultValidation.Errors.First().ErrorMessage));
+            
             var telegram = request.TelegramData;
 
             // Преобразуем gRPC-модель в DTO приложения.
@@ -45,9 +45,7 @@ namespace PsySchedule.Services.Grpc
                 )
             );
 
-            var result = await _service.CreateAsync(
-                dto,
-                context.CancellationToken);
+            var result = await _service.CreateAsync(dto, context.CancellationToken);
 
             var response = new ClientTelegramResponse
             {
