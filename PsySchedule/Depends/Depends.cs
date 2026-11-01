@@ -36,6 +36,8 @@ namespace PsySchedule.Depends
 
             builder.Services.AddScoped<IClientService<GRPC.ClientTelegramRequest>, ClientTelegramService>();
 
+            builder.Services.AddScoped<ITimeZoneService, TimeZoneService>();
+
 
             builder.Services.AddScoped<IValidator<AuthenticationDto>, AuthenticationValidator>();
             builder.Services.AddScoped<IValidator<GRPC.ClientTelegramRequest>, ClientTelegramRequestValidator>();
