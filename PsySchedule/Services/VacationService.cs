@@ -11,12 +11,14 @@ namespace PsySchedule.Services
         private readonly DataContext _context;
         private readonly ILogger<VacationService> _logger;
         private readonly IDayService _dayService;
+        private readonly ITimeZoneService _timeZoneService;
 
-        public VacationService(DataContext context, ILogger<VacationService> logger, IDayService dayService)
+        public VacationService(DataContext context, ILogger<VacationService> logger, IDayService dayService, ITimeZoneService timeZoneService)
         {
             _context = context;
             _logger = logger;
             _dayService = dayService;
+            _timeZoneService = timeZoneService;
         }
 
         public async Task<Result<IEnumerable<VacationResponse>>> GetAsync(int psyId, CancellationToken cancellationToken)
@@ -71,15 +73,13 @@ namespace PsySchedule.Services
                 return Result.Failure(409, "Отпуск пересекается с другими отпусками");
             }
 
-            var psyTimeZone = await _context.Psychologists.Where(p => p.Id == psyId).Select(p => p.TimeZone).FirstOrDefaultAsync(cancellationToken);
-
-            var timeZone = TimeZoneInfo.FindSystemTimeZoneById(psyTimeZone);
+            var psyTimeZoneId = await _context.Psychologists.Where(p => p.Id == psyId).Select(p => p.TimeZone).FirstOrDefaultAsync(cancellationToken);
 
             var localStart = request.StartedAt.ToDateTime(TimeOnly.MinValue);
             var localEnd = request.FinishedAt.AddDays(1).ToDateTime(TimeOnly.MinValue);
 
-            var utcStart = TimeZoneInfo.ConvertTimeToUtc(localStart, timeZone);
-            var utcEnd = TimeZoneInfo.ConvertTimeToUtc(localEnd, timeZone);
+            var utcStart = _timeZoneService.ConvertToUtc(localStart, psyTimeZoneId);
+            var utcEnd = _timeZoneService.ConvertToUtc(localEnd, psyTimeZoneId);
 
             var hasAppointment = await _context.Appointments.AnyAsync(a => a.PsychologistId == psyId &&
                                                                            (a.Status == Models.Enums.AppointmentStatus.Confirmed ||

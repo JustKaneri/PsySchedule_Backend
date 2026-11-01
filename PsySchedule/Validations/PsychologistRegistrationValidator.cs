@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using PsySchedule.Dto;
+using PsySchedule.Interfaces;
 
 namespace PsySchedule.Validations
 {
@@ -8,7 +9,7 @@ namespace PsySchedule.Validations
     /// </summary>
     public class PsychologistRegistrationValidator : AbstractValidator<RegisterPsychologistDto>
     {
-        public PsychologistRegistrationValidator()
+        public PsychologistRegistrationValidator(ITimeZoneService timeZoneService)
         {
             RuleFor(n => n.Name)
                     .NotEmpty()
@@ -41,14 +42,8 @@ namespace PsySchedule.Validations
             RuleFor(t => t.TimeZone)
                     .NotEmpty()
                         .WithMessage("Часовой пояс не может быть пустым")
-                    .Must(BeValidTimeZone)
+                    .Must(timeZoneService.CheckIsExists)
                         .WithMessage("Некорректный часовой пояс");
-        }
-
-        private bool BeValidTimeZone(string timeZoneId)
-        {
-            return TimeZoneInfo.GetSystemTimeZones()
-                               .Any(tz => tz.Id == timeZoneId);
         }
     }
 }

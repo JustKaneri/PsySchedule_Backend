@@ -24,5 +24,10 @@ namespace PsySchedule.Interfaces
         /// время указанного часового пояса.
         /// </summary>
         public DateTimeOffset ConvertFromUtc(DateTimeOffset utc, string timeZoneId);
+
+        /// <summary>
+        /// Конвертировать в UTC время из локального
+        /// </summary>
+        public DateTimeOffset ConvertToUtc(DateTimeOffset dateTime, string timeZoneId);
     }
 }

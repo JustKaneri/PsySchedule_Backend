@@ -1,5 +1,6 @@
 ﻿using PsySchedule.Dto;
 using PsySchedule.Models;
+using PsySchedule.Services;
 using PsySchedule.Validations;
 using System;
 using System.Collections.Generic;
@@ -13,14 +14,14 @@ namespace PsyScheduleTests.ValidationsTests
 
         public PsychologistRegistrationValidatorTest()
         {
-            validations = new PsychologistRegistrationValidator();
+            validations = new PsychologistRegistrationValidator(new TimeZoneService());
         }
 
         [Fact]
         public void Valid_Data()
         {
             RegisterPsychologistDto registerPsychologist = new RegisterPsychologistDto(
-                "bob123", "bob123", "A2345678a!", "Russian Standard Time");
+                "bob123", "bob123", "A2345678a!", "Asia/Colombo");
 
             var result = validations.Validate(registerPsychologist);
 
@@ -31,7 +32,7 @@ namespace PsyScheduleTests.ValidationsTests
         public void Not_Valid_Name()
         {
             RegisterPsychologistDto registerPsychologist = new RegisterPsychologistDto(
-                "222", "bob123", "A2345678a!", "Russian Standard Time");
+                "222", "bob123", "A2345678a!", "Asia/Colombo");
 
             var result = validations.Validate(registerPsychologist);
 
@@ -62,7 +63,7 @@ namespace PsyScheduleTests.ValidationsTests
         public void Short_Passowrd()
         {
             RegisterPsychologistDto shortPassword = new RegisterPsychologistDto(
-                "bob123", "bob123", "12345", "Russian Standard Time");
+                "bob123", "bob123", "12345", "Asia/Colombo");
 
             var result = validations.Validate(shortPassword);
 
@@ -76,7 +77,7 @@ namespace PsyScheduleTests.ValidationsTests
         public void Long_Password()
         {
             RegisterPsychologistDto longPassword = new RegisterPsychologistDto(
-                    "bob123", "bob123", new string('a',100), "Russian Standard Time");
+                    "bob123", "bob123", new string('a',100), "Asia/Colombo");
 
             var result = validations.Validate(longPassword);
 
@@ -90,7 +91,7 @@ namespace PsyScheduleTests.ValidationsTests
         public void Regex_Password()
         {
             RegisterPsychologistDto longPassword = new RegisterPsychologistDto(
-                    "bob123", "bob123", "12345678", "Russian Standard Time");
+                    "bob123", "bob123", "12345678", "Asia/Colombo" );
 
             var result = validations.Validate(longPassword);
 
@@ -104,7 +105,7 @@ namespace PsyScheduleTests.ValidationsTests
         public void Not_Correct_Time_Zone()
         {
             RegisterPsychologistDto data = new RegisterPsychologistDto(
-                    "bob123", "bob123", "A2345678a!", "Rus Standard Time");
+                    "bob123", "bob123", "A2345678a!", "Colombo");
 
             var result = validations.Validate(data);
 

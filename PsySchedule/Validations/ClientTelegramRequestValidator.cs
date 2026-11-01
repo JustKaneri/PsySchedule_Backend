@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using PsySchedule.Interfaces;
 using GrpcClient = PsySchedule.GRPC;
 
 
@@ -6,7 +7,7 @@ namespace PsySchedule.Validations
 {
     public class ClientTelegramRequestValidator : AbstractValidator<GrpcClient.ClientTelegramRequest>
     {
-        public ClientTelegramRequestValidator()
+        public ClientTelegramRequestValidator(ITimeZoneService timeZoneService)
         {
             RuleFor(x => x.FirstName)
                 .NotEmpty()
@@ -27,33 +28,13 @@ namespace PsySchedule.Validations
             RuleFor(x => x.TimeZone)
                 .NotEmpty()
                 .WithMessage("Часовой пояс обязателен для заполнения.")
-                .Must(BeValidTimeZone)
+                .Must(timeZoneService.CheckIsExists)
                 .WithMessage("Указан некорректный часовой пояс.");
 
             RuleFor(x => x.TelegramData)
                 .NotNull()
                 .WithMessage("Данные Telegram обязательны для заполнения.")
                 .SetValidator(new TelegramDataValidator()!);
-        }
-
-        private static bool BeValidTimeZone(string? timeZone)
-        {
-            if (string.IsNullOrWhiteSpace(timeZone))
-                return false;
-
-            try
-            {
-                TimeZoneInfo.FindSystemTimeZoneById(timeZone);
-                return true;
-            }
-            catch (TimeZoneNotFoundException)
-            {
-                return false;
-            }
-            catch (InvalidTimeZoneException)
-            {
-                return false;
-            }
         }
     }
 }
