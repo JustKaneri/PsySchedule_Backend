@@ -4,9 +4,9 @@ using PsySchedule.Models;
 
 namespace PsySchedule.Mapper
 {
-    public class ClientTelegramMapper : IMapper<GRPC.ClientTelegramRequest, Client>
+    public class ClientTelegramMapper : IMapper<ClientTelegramRequest, Client>
     {
-        public Client FromDto(GRPC.ClientTelegramRequest dto)
+        public Client FromDto(ClientTelegramRequest dto)
         {
             return new Client()
             {
@@ -27,7 +27,7 @@ namespace PsySchedule.Mapper
             };
         }
 
-        public GRPC.ClientTelegramRequest FromEntity(Client entity)
+        public ClientTelegramRequest FromEntity(Client entity)
         {
             throw new NotImplementedException();
         }

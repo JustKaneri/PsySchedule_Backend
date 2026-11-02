@@ -16,6 +16,8 @@ using System.Data.Common;
 using System.Text;
 using Testcontainers.PostgreSql;
 
+using GRPC = PsySchedule.GRPC;
+
 namespace PsyScheduleTests
 {
     public class PostgreSqlFixture : IAsyncLifetime
@@ -81,6 +83,10 @@ namespace PsyScheduleTests
             services.AddScoped<IServiceManager,  ServiceManager>();
             services.AddScoped<IMapper<ServiceResponse, Service>, ServiceMapper>();
             services.AddScoped<ITimeZoneService, TimeZoneService>();
+
+            // Добавляем сервисы для тестирования клиента
+            services.AddScoped<IClientService<ClientTelegramRequest>, PsySchedule.Services.ClientTelegramService>();
+            services.AddScoped<IMapper<ClientTelegramRequest, Client>, ClientTelegramMapper>();
         }
 
         private async Task InitDataBaseAsync()
@@ -116,3 +122,4 @@ namespace PsyScheduleTests
         }
     }
 }
+

@@ -20,7 +20,7 @@ namespace PsySchedule.Depends
 
             builder.Services.AddScoped<IMapper<ScheduleTemplateDayDto,ScheduleTemplate,int>, ScheduleTemplateMapper>();
             builder.Services.AddScoped<IMapper<ServiceResponse, Service>, ServiceMapper>();
-            builder.Services.AddScoped<IMapper<GRPC.ClientTelegramRequest, Client>, ClientTelegramMapper>();
+            builder.Services.AddScoped<IMapper<ClientTelegramRequest, Client>, ClientTelegramMapper>();
 
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IRegistrationService, RegistrationService>();
@@ -34,7 +34,7 @@ namespace PsySchedule.Depends
 
             builder.Services.AddScoped<IVacationService, VacationService>();
 
-            builder.Services.AddScoped<IClientService<GRPC.ClientTelegramRequest>, ClientTelegramService>();
+            builder.Services.AddScoped<IClientService<ClientTelegramRequest>, ClientTelegramService>();
 
             builder.Services.AddScoped<ITimeZoneService, TimeZoneService>();
 

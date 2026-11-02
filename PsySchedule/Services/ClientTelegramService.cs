@@ -10,20 +10,20 @@ namespace PsySchedule.Services
     /// <summary>
     /// Сервис для регистрации клиента через телеграмм
     /// </summary>
-    public class ClientTelegramService : IClientService<GRPC.ClientTelegramRequest>
+    public class ClientTelegramService : IClientService<ClientTelegramRequest>
     {
         private readonly DataContext _context;
         private readonly ILogger<ClientTelegramService> _logger;
-        private readonly IMapper<GRPC.ClientTelegramRequest, Client> _mapper;
+        private readonly IMapper<ClientTelegramRequest, Client> _mapper;
 
-        public ClientTelegramService(DataContext context, ILogger<ClientTelegramService> logger, IMapper<GRPC.ClientTelegramRequest, Client> mapper)
+        public ClientTelegramService(DataContext context, ILogger<ClientTelegramService> logger, IMapper<ClientTelegramRequest, Client> mapper)
         {
             _context = context;
             _logger = logger;
             _mapper = mapper;
         }
 
-        public async Task<Result> CreateAsync(GRPC.ClientTelegramRequest request, CancellationToken cancellationToken)
+        public async Task<Result> CreateAsync(ClientTelegramRequest request, CancellationToken cancellationToken)
         {
             var isExist = await _context.Clients.AnyAsync(c => c.TelegramId == request.TelegramData.Id,cancellationToken);
 
