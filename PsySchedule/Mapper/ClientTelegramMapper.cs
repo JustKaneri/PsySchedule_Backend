@@ -20,7 +20,7 @@ namespace PsySchedule.Mapper
                     Id = dto.TelegramData.Id,
                     FirstName = dto.TelegramData.FirstName,
                     UserName = dto.TelegramData.UserName,
-                    LasttName = dto.TelegramData.LastName,
+                    LastName = dto.TelegramData.LastName,
                     LanguageCode = dto.TelegramData.LanguageCode,
                     TelegramChatId = dto.TelegramData.TelegramChatId
                 }

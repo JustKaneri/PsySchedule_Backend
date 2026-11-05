@@ -96,7 +96,7 @@ namespace PsyScheduleTests.ServiceTests
                     Id = 123456L,
                     UserName ="ivan_test",
                     FirstName = "Test",
-                    LasttName = "User",
+                    LastName = "User",
                     LanguageCode = "en",
                     TelegramChatId = 123456L
                 }

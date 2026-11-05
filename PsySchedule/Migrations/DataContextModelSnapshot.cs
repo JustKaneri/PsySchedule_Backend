@@ -170,7 +170,7 @@ namespace PsySchedule.Migrations
                     b.Property<string>("LanguageCode")
                         .HasColumnType("text");
 
-                    b.Property<string>("LasttName")
+                    b.Property<string>("LastName")
                         .HasColumnType("text");
 
                     b.Property<long>("TelegramChatId")
